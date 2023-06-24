@@ -29,7 +29,8 @@ void SnakeGame::run() {
 
 void SnakeGame::makeMove() {
     checkInput();
-    if (m_food.isFood(m_snake.predictMove())) {
+    auto nextMove = m_snake.predictMove();
+    if (m_food.isFood(nextMove)) {
         m_snake.moveAndGrow();
         m_food.getEaten();
         while (m_snake.isSnake(m_food.getCoords())) {
@@ -39,10 +40,20 @@ void SnakeGame::makeMove() {
         return;
     }
 
-    try {
-        m_snake.move();
-    } catch (std::runtime_error &e) {
+    checkForTeleport(nextMove);
+
+    if (m_snake.moveTo(nextMove) == MoveResult::IMPOSSIBLE) {
         m_state = GameState::GAME_OVER;
+    }
+}
+
+void SnakeGame::checkForTeleport(coords_t &nextMove) const {
+    if (nextMove.first < 1 || nextMove.first >= m_width - 1) {
+        nextMove.first = abs(nextMove.first - m_width + 2);
+    }
+
+    if (nextMove.second < 1 || nextMove.second >= m_height - 1) {
+        nextMove.second = abs(nextMove.second - m_height + 2);
     }
 }
 
@@ -86,6 +97,6 @@ void SnakeGame::draw() const {
 
 void SnakeGame::drawScore() const {
     mvprintw(m_height, 0, "Score: %d", m_score);
-    auto length_str = "Length: " + std::to_string(m_snake.getLength());
-    mvprintw(m_height, m_width - static_cast<int>(length_str.length()), "%s", length_str.c_str());
+    auto lengthStr = "Length: " + std::to_string(m_snake.getLength());
+    mvprintw(m_height, m_width - static_cast<int>(lengthStr.length()), "%s", lengthStr.c_str());
 }

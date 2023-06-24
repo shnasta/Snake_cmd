@@ -14,12 +14,10 @@ enum class GameState {
 };
 
 class SnakeGame {
+    using coords_t = std::pair<int, int>;
 public:
     SnakeGame();
     void run();
-
-    void makeMove();
-    void draw() const;
 private:
     int DELAY = 300;
     WINDOW *m_win;
@@ -34,6 +32,9 @@ private:
 
     void checkInput();
 
+    void makeMove();
+    void draw() const;
     void drawScore() const;
+    void checkForTeleport(coords_t &nextMove) const;
 };
 #endif //SNAKE_GAME_SNAKE_GAME_HPP

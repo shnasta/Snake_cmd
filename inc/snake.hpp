@@ -11,14 +11,13 @@ enum Direction {
     RIGHT
 };
 
+enum MoveResult {
+    POSSIBLE,
+    IMPOSSIBLE,
+};
+
 class Snake {
     using coords_t = std::pair<int, int>;
-
-    coords_t m_head;
-    int m_length = 3;
-    std::vector<coords_t> m_body;
-    Direction m_direction = Direction::UP;
-
 public:
     Snake(int startX, int startY);
     ~Snake() = default;
@@ -30,7 +29,9 @@ public:
     [[nodiscard]] bool isSnake(coords_t coords) const;
 
     coords_t predictMove();
-    void move();
+    MoveResult move();
+    MoveResult moveAndTeleport(coords_t& coords);
+    MoveResult moveTo(coords_t& coords);
     void moveAndGrow();
     void setDirection(Direction direction);
     void draw() const;
@@ -40,6 +41,11 @@ public:
     void debugPrint() const;
 
     void erase(WINDOW *win) const;
+private:
+    coords_t m_head;
+    int m_length = 3;
+    std::vector<coords_t> m_body;
+    Direction m_direction = Direction::UP;
 };
 
 

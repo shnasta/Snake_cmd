@@ -6,10 +6,6 @@
 
 class Food {
     using coords_t = std::pair<int, int>;
-
-    coords_t m_coords;
-    int m_width;
-    int m_height;
 public:
     Food(int width, int height);
 
@@ -25,6 +21,10 @@ public:
     void draw(WINDOW *win) const;
     void erase() const;
     void erase(WINDOW *win) const;
+private:
+    coords_t m_coords;
+    int m_width;
+    int m_height;
 };
 
 #endif //SNAKE_GAME_FOOD_HPP

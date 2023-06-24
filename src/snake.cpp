@@ -48,14 +48,23 @@ Snake::coords_t Snake::predictMove() {
     }
 }
 
-void Snake::move() {
+MoveResult Snake::move() {
     coords_t newHead = predictMove();
-    if (isSnake(newHead)) {
-        throw std::runtime_error("Snake collided with itself!");
+    return moveTo(newHead);
+}
+
+MoveResult Snake::moveAndTeleport(coords_t& coords) {
+    return moveTo(coords);
+}
+
+MoveResult Snake::moveTo(coords_t& coords) {
+    if (isSnake(coords)) {
+        return IMPOSSIBLE;
     }
-    m_head = newHead;
+    m_head = coords;
     m_body.pop_back();
-    m_body.emplace(m_body.begin(), newHead);
+    m_body.emplace(m_body.begin(), coords);
+    return POSSIBLE;
 }
 
 void Snake::moveAndGrow() {
