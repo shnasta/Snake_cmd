@@ -1,7 +1,7 @@
 #include <stdexcept>
 #include "snake_game.hpp"
 
-SnakeGame::SnakeGame() : m_width(20), m_height(20),
+SnakeGame::SnakeGame() : m_width(50), m_height(20),
                          m_snake(m_width / 2, m_height / 2),
                          m_food(m_width, m_height) {
     initscr();
@@ -10,8 +10,7 @@ SnakeGame::SnakeGame() : m_width(20), m_height(20),
     keypad(stdscr, TRUE);
     nodelay(stdscr, TRUE);
     curs_set(0);
-    getmaxyx(stdscr, m_height, m_width);
-
+//    getmaxyx(stdscr, m_height, m_width);
     m_win = newwin(m_height, m_width, 0, 0);
     box(m_win, 0, 0);
     refresh();
@@ -66,16 +65,24 @@ void SnakeGame::checkInput() {
         case 'd':
             m_snake.setDirection(RIGHT);
             break;
+        case 'q':
+            m_state = GameState::GAME_OVER;
+            break;
         default:
             break;
     }
 }
 
 void SnakeGame::draw() const {
-//    wclear(m_win);
-//    box(m_win, 0, 0);
     m_snake.draw(m_win);
     m_food.draw(m_win);
+    drawScore();
     wrefresh(m_win);
     m_snake.erase(m_win);
+}
+
+void SnakeGame::drawScore() const {
+    mvprintw(m_height, 0, "Score: %d", m_score);
+    auto length_str = "Length: " + std::to_string(m_snake.getLength());
+    mvprintw(m_height, m_width - static_cast<int>(length_str.length()), "%s", length_str.c_str());
 }

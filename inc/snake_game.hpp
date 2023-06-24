@@ -21,7 +21,7 @@ public:
     void makeMove();
     void draw() const;
 private:
-    int DELAY = 500;
+    int DELAY = 300;
     WINDOW *m_win;
     int m_width;
     int m_height;
@@ -33,5 +33,7 @@ private:
     int m_score = 0;
 
     void checkInput();
+
+    void drawScore() const;
 };
 #endif //SNAKE_GAME_SNAKE_GAME_HPP

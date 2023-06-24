@@ -69,14 +69,14 @@ void Snake::draw() const {
     for (const auto &coords : m_body) {
         mvprintw(coords.second, coords.first, "o");
     }
-    mvprintw(getY(), getX(), "O");
+    mvprintw(getY(), getX(), "0");
 }
 
 void Snake::draw(WINDOW *win) const {
     for (const auto &coords : m_body) {
         mvwprintw(win, coords.second, coords.first, "o");
     }
-    mvwprintw(win, getY(), getX(), "O");
+    mvwprintw(win, getY(), getX(), "0");
 }
 
 void Snake::erase() const {
