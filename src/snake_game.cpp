@@ -32,6 +32,9 @@ void SnakeGame::makeMove() {
     if (m_food.isFood(m_snake.predictMove())) {
         m_snake.moveAndGrow();
         m_food.getEaten();
+        while (m_snake.isSnake(m_food.getCoords())) {
+            m_food.createNew(m_width, m_height);
+        }
         m_score++;
         return;
     }

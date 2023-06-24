@@ -19,7 +19,6 @@ class Snake {
     std::vector<coords_t> m_body;
     Direction m_direction = Direction::UP;
 
-    [[nodiscard]] bool isSnake(coords_t coords) const;
 public:
     Snake(int startX, int startY);
     ~Snake() = default;
@@ -28,6 +27,7 @@ public:
     [[nodiscard]] int getY() const { return m_head.second; }
     [[nodiscard]] int getLength() const { return m_length; }
     [[nodiscard]] Direction getDirection() const { return m_direction; }
+    [[nodiscard]] bool isSnake(coords_t coords) const;
 
     coords_t predictMove();
     void move();

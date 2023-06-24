@@ -15,6 +15,7 @@ public:
 
     [[nodiscard]] int getX() const { return m_coords.first; }
     [[nodiscard]] int getY() const { return m_coords.second; }
+    [[nodiscard]] coords_t getCoords() const { return m_coords; }
     [[nodiscard]] bool isFood(coords_t coords) const { return m_coords == coords; }
 
     void createNew(int width, int height);
