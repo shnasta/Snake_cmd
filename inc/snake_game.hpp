@@ -16,12 +16,12 @@ public:
 
     void endGame();
 
-    int getWidth() const { return m_width; }
-    int getHeight() const { return m_height; }
-    WINDOW* getWindow() const { return m_win; }
-    int getScore() const { return m_score; }
+    [[nodiscard]] int getWidth() const { return m_width; }
+    [[nodiscard]] int getHeight() const { return m_height; }
+    [[nodiscard]] WINDOW* getWindow() const { return m_win; }
+    [[nodiscard]] int getScore() const { return m_score; }
     void setScore(int score) { m_score = score; }
-    int getHighScore() const { return m_highScore; }
+    [[nodiscard]] int getHighScore() const { return m_highScore; }
     void setHighScore(int highScore) { if (highScore > m_highScore) m_highScore = highScore; }
 private:
     BasicState<SnakeGame> *m_currentState = nullptr;
