@@ -7,6 +7,7 @@
 class Food {
     using coords_t = std::pair<int, int>;
 public:
+    Food() = default;
     Food(int width, int height);
 
     [[nodiscard]] int getX() const { return m_coords.first; }

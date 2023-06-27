@@ -19,6 +19,7 @@ enum MoveResult {
 class Snake {
     using coords_t = std::pair<int, int>;
 public:
+    Snake() = default;
     Snake(int startX, int startY);
     ~Snake() = default;
 

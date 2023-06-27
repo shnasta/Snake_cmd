@@ -5,8 +5,8 @@ project(${PROJECT_NAME})
 
 set(CMAKE_CXX_STANDARD 20)
 
-file(GLOB HEADERS "inc/*.h")
-file(GLOB SOURCES "src/*.cpp")
+file(GLOB_RECURSE HEADERS "inc/*.hpp")
+file(GLOB_RECURSE SOURCES "src/*.cpp")
 add_executable(${PROJECT_NAME} ${HEADERS} ${SOURCES})
 
 target_include_directories(${PROJECT_NAME} PRIVATE inc)
