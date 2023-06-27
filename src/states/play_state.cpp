@@ -47,8 +47,10 @@ void PlayState::execute(SnakeGame* game) {
 void PlayState::makeMove() {
     checkInput();
     auto nextMove = m_snake.predictMove();
+    checkForTeleport(nextMove);
+
     if (m_food.isFood(nextMove)) {
-        m_snake.moveAndGrow();
+        m_snake.moveToAndGrow(nextMove);
         m_food.getEaten();
         while (m_snake.isSnake(m_food.getCoords())) {
             m_food.createNew(m_width, m_height);
@@ -56,8 +58,6 @@ void PlayState::makeMove() {
         m_score++;
         return;
     }
-
-    checkForTeleport(nextMove);
 
     if (m_snake.moveTo(nextMove) == MoveResult::IMPOSSIBLE) {
         m_gameOver = true;

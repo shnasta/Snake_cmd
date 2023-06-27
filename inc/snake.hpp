@@ -33,6 +33,7 @@ public:
     MoveResult move();
     MoveResult moveAndTeleport(coords_t& coords);
     MoveResult moveTo(coords_t& coords);
+    void moveToAndGrow(coords_t& coords);
     void moveAndGrow();
     void setDirection(Direction direction);
     void draw() const;

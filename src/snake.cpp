@@ -67,11 +67,15 @@ MoveResult Snake::moveTo(coords_t& coords) {
     return POSSIBLE;
 }
 
+void Snake::moveToAndGrow(coords_t& coords) {
+    m_head = coords;
+    m_length++;
+    m_body.emplace(m_body.begin(), coords);
+}
+
 void Snake::moveAndGrow() {
     coords_t newHead = predictMove();
-    m_head = newHead;
-    m_length++;
-    m_body.emplace(m_body.begin(), newHead);
+    moveToAndGrow(newHead);
 }
 
 void Snake::draw() const {
