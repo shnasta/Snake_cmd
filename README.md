@@ -1,1 +1,1 @@
-# Snake game in Linux terminal using ncurses
+# Snake game in terminal using ncurses
