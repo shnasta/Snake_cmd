@@ -12,7 +12,8 @@ void PlayState::enter(SnakeGame* game) {
     refresh();
     m_width = game->getWidth();
     m_height = game->getHeight();
-
+    m_gameOver = false;
+    m_score = 0;
     m_snake = Snake(m_width / 2, m_height / 2);
     m_food = Food(m_width, m_height);
 
@@ -25,8 +26,6 @@ void PlayState::enter(SnakeGame* game) {
 void PlayState::exit(SnakeGame* game) {
     game->setScore(m_score);
     game->setHighScore(m_score);
-    m_gameOver = false;
-    m_score = 0;
 
     wclear(m_win);
     clear();
