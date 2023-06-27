@@ -11,10 +11,9 @@ void MainMenuState::enter(SnakeGame* game) {
     m_win = game->getWindow();
     box(m_win, 0, 0);
     refresh();
-    mvwprintw(m_win, 1, 1, "Snake Game");
-    mvwprintw(m_win, 2, 1, "Press 's' key to start");
-    mvwprintw(m_win, 3, 1, "Press 'q' key to exit");
     wrefresh(m_win);
+
+    initMenu(game);
 }
 
 void MainMenuState::exit(SnakeGame* game) {
@@ -23,15 +22,23 @@ void MainMenuState::exit(SnakeGame* game) {
 }
 
 void MainMenuState::execute(SnakeGame* game) {
+    int choice;
     while (true) {
-        int ch = getch();
-        if (ch == 's') {
-            game->setState(PlayState::getInstance());
-            break;
-        }
-        if (ch == 'q') {
-            game->endGame();
+        m_menu.draw(m_win, 1, 1);
+
+        choice = getch();
+        if (m_menu.handleInput(choice)) {
             break;
         }
     }
+}
+
+void MainMenuState::initMenu(SnakeGame* game) {
+    m_menu = Menu(3);
+    m_menu.setOption(0, "Start", [game]() { game->setState(PlayState::getInstance()); });
+    m_menu.setOption(1, "Settings", [game]() { printw("Settings option selected."); refresh();
+        int choice = getch();
+        game->setState(MainMenuState::getInstance());
+    });
+    m_menu.setOption(2, "Exit", [game]() { game->endGame(); });
 }

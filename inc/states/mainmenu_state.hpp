@@ -3,6 +3,8 @@
 
 #include "basic_state.hpp"
 #include "snake_game.hpp"
+#include "utils/menu.hpp"
+#include <string>
 
 class MainMenuState : public BasicState<SnakeGame> {
 public:
@@ -12,6 +14,9 @@ public:
     static MainMenuState& getInstance();
 private:
     WINDOW *m_win{};
+    Menu m_menu{};
+
+    void initMenu(SnakeGame* game);
 };
 
 

@@ -14,11 +14,11 @@ void GameOverState::enter(SnakeGame* game) {
     box(m_win, 0, 0);
     refresh();
     mvwprintw(m_win, 1, 1, "Game Over!");
-    mvwprintw(m_win, 2, 1, "Press 'q' key to exit");
-    mvwprintw(m_win, 3, 1, "Press 'r' key to restart");
-    mvwprintw(m_win, 4, 1, "Score: %d", m_score);
-    mvwprintw(m_win, 5, 1, "High Score: %d", m_highScore);
+    mvwprintw(m_win, 2, 1, "Score:      %d", m_score);
+    mvwprintw(m_win, 3, 1, "High Score: %d", m_highScore);
     wrefresh(m_win);
+
+    initMenu(game);
 }
 
 void GameOverState::exit(SnakeGame* game) {
@@ -28,14 +28,17 @@ void GameOverState::exit(SnakeGame* game) {
 
 void GameOverState::execute(SnakeGame* game) {
     while (true) {
-        int ch = getch();
-        if (ch == 'q') {
-            game->endGame();
-            break;
-        }
-        if (ch == 'r') {
-            game->setState(PlayState::getInstance());
+        m_menu.draw(m_win, 5, 1);
+
+        int choice = getch();
+        if (m_menu.handleInput(choice)) {
             break;
         }
     }
+}
+
+void GameOverState::initMenu(SnakeGame* game) {
+    m_menu = Menu(2);
+    m_menu.setOption(0, "Restart", [game]() { game->setState(PlayState::getInstance()); });
+    m_menu.setOption(1, "Quit", [game]() { game->endGame(); });
 }
