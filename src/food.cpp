@@ -1,13 +1,13 @@
 #include "food.hpp"
 #include <random>
-#include <ctime>
 
 Food::Food(int width, int height) : m_width(width), m_height(height) {
     createNew(m_width, m_height);
 }
 
 void Food::createNew(int width, int height) {
-    std::mt19937 mt(time(nullptr));
+    std::random_device rd;
+    std::mt19937 mt(rd());
     m_coords.first = static_cast<int>(mt() % (width - 2)) + 1;
     m_coords.second = static_cast<int>(mt() % (height - 2)) + 1;
 }
