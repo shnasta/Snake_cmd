@@ -61,7 +61,7 @@ void PlayState::makeMove() {
     if (m_food.isFood(nextMove)) {
         m_snake.moveToAndGrow(nextMove);
         m_food.getEaten();
-        while (m_snake.isSnake(m_food.getCoords())) {
+        while (m_snake.isSnake(m_food.getCoords()) || m_wall.isWall(m_food.getCoords())) {
             m_food.createNew(m_width, m_height);
         }
         m_score++;

@@ -3,7 +3,7 @@
 
 Wall::Wall(std::vector<coords_t>& walls) : m_walls(std::move(walls)) {}
 
-bool Wall::isWall(coords_t& coords) const {
+bool Wall::isWall(const coords_t& coords) const {
     return std::find(m_walls.begin(), m_walls.end(), coords) != m_walls.end();
 }
 

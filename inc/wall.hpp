@@ -11,7 +11,7 @@ public:
     Wall(std::vector<coords_t>& walls);
     ~Wall() = default;
 
-    [[nodiscard]] bool isWall(coords_t& coords) const;
+    [[nodiscard]] bool isWall(const coords_t& coords) const;
     void addWall(const coords_t& coords);
     void generateRandomWall(int width, int height);
 
