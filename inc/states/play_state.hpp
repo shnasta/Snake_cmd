@@ -5,6 +5,7 @@
 #include "snake_game.hpp"
 #include "snake.hpp"
 #include "food.hpp"
+#include "wall.hpp"
 
 class PlayState : public BasicState<SnakeGame> {
     using coords_t = std::pair<int, int>;
@@ -17,7 +18,7 @@ private:
     WINDOW *m_win{};
     Snake m_snake{};
     Food m_food{};
-    char m_input{};
+    Wall m_wall{};
     int m_score{};
     int m_width{};
     int m_height{};

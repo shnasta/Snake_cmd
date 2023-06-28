@@ -16,6 +16,11 @@ void PlayState::enter(SnakeGame* game) {
     m_score = 0;
     m_snake = Snake(m_width / 2, m_height / 2);
     m_food = Food(m_width, m_height);
+    m_wall = Wall();
+    for (int i = 1; i < m_width - 1; i++) {
+        m_wall.addWall(coords_t{i, 1});
+        m_wall.addWall(coords_t{i, m_height - 2});
+    }
 
     m_win = game->getWindow();
     box(m_win, 0, 0);
@@ -48,6 +53,11 @@ void PlayState::makeMove() {
     auto nextMove = m_snake.predictMove();
     checkForTeleport(nextMove);
 
+
+    if (m_wall.isWall(nextMove)) {
+        m_gameOver = true;
+        return;
+    }
     if (m_food.isFood(nextMove)) {
         m_snake.moveToAndGrow(nextMove);
         m_food.getEaten();
@@ -106,6 +116,7 @@ void PlayState::checkInput() {
 void PlayState::draw() const {
     m_snake.draw(m_win);
     m_food.draw(m_win);
+    m_wall.draw(m_win);
     drawScore();
     wrefresh(m_win);
     m_snake.erase(m_win);
