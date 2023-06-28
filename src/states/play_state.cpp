@@ -1,6 +1,7 @@
 #include "states/play_state.hpp"
 #include "states/gameover_state.hpp"
 #include <string>
+#include <fstream>
 
 PlayState& PlayState::getInstance() {
     static PlayState instance;
@@ -10,22 +11,23 @@ PlayState& PlayState::getInstance() {
 void PlayState::enter(SnakeGame* game) {
     nodelay(stdscr, TRUE);
     refresh();
-    m_width = game->getWidth();
-    m_height = game->getHeight();
     m_gameOver = false;
     m_score = 0;
-    m_snake = Snake(m_width / 2, m_height / 2);
-    m_food = Food(m_width, m_height);
-    m_wall = Wall();
-    for (int i = 1; i < m_width - 1; i++) {
-        m_wall.addWall(coords_t{i, 1});
-        m_wall.addWall(coords_t{i, m_height - 2});
-    }
-
+    m_width = game->getWidth();
+    m_height = game->getHeight();
     m_win = game->getWindow();
     box(m_win, 0, 0);
     refresh();
     wrefresh(m_win);
+
+    auto level = game->getCurrentLevel();
+    if (level.empty()) {
+        defaultLevel();
+    }
+    else {
+        mvwprintw(m_win, 0, 1, " %s ", level.substr(0, level.find_last_of('.')).c_str());
+        readLevel(game->getLevelsPath() + level);
+    }
 }
 
 void PlayState::exit(SnakeGame* game) {
@@ -126,4 +128,43 @@ void PlayState::drawScore() const {
     mvprintw(m_height, 0, "Score: %d", m_score);
     auto lengthStr = "Length: " + std::to_string(m_snake.getLength());
     mvprintw(m_height, m_width - static_cast<int>(lengthStr.length()), "%s", lengthStr.c_str());
+}
+
+void PlayState::readLevel(const std::string& levelPath) {
+    if (levelPath.empty()) {
+        defaultLevel();
+        return;
+    }
+
+    m_wall = Wall();
+
+    std::ifstream levelFile(levelPath);
+    std::string line;
+    int y = 1;
+    while (std::getline(levelFile, line)) {
+//        if (line.empty()) {
+//            ++y;
+//            continue;
+//        }
+        for (int x = 0; x < static_cast<int>(line.length()); ++x) {
+            if (line[x] == '#') {
+                m_wall.addWall(coords_t{x + 1, y});
+            }
+            if (line[x] == '0') {
+                m_snake = Snake(x + 1, y);
+            }
+        }
+        ++y;
+    }
+    m_food = Food(m_width, m_height);
+}
+
+void PlayState::defaultLevel() {
+    m_snake = Snake(m_width / 2, m_height / 2);
+    m_food = Food(m_width, m_height);
+    m_wall = Wall();
+    for (int i = 1; i < m_width - 1; i++) {
+        m_wall.addWall(coords_t{i, 1});
+        m_wall.addWall(coords_t{i, m_height - 2});
+    }
 }

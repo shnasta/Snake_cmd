@@ -1,5 +1,6 @@
 #include "states/gameover_state.hpp"
 #include "states/play_state.hpp"
+#include "states/mainmenu_state.hpp"
 
 GameOverState& GameOverState::getInstance() {
     static GameOverState instance;
@@ -38,7 +39,8 @@ void GameOverState::execute(SnakeGame* game) {
 }
 
 void GameOverState::initMenu(SnakeGame* game) {
-    m_menu = Menu(2);
+    m_menu = Menu(3);
     m_menu.setOption(0, "Restart", [game]() { game->setState(PlayState::getInstance()); });
-    m_menu.setOption(1, "Quit", [game]() { game->endGame(); });
+    m_menu.setOption(1, "Main Menu", [game]() { game->setState(MainMenuState::getInstance()); });
+    m_menu.setOption(2, "Exit", [game]() { game->endGame(); });
 }

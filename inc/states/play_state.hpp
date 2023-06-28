@@ -35,6 +35,10 @@ private:
     void draw() const;
 
     void drawScore() const;
+
+    void readLevel(const std::string &levelPath);
+
+    void defaultLevel();
 };
 
 #endif //SNAKE_GAME_PLAY_STATE_HPP

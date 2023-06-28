@@ -14,9 +14,15 @@ public:
     static MainMenuState& getInstance();
 private:
     WINDOW *m_win{};
-    Menu m_menu{};
+    Menu m_mainMenu{};
+    Menu m_settingsMenu{};
+    Menu m_levelsMenu{};
+    Menu* m_currentMenu = nullptr;
+    bool m_exit = false;
 
-    void initMenu(SnakeGame* game);
+    void initMainMenu(SnakeGame* game);
+    void initSettingsMenu(SnakeGame* game);
+    void initLevelsMenu(SnakeGame* game);
 };
 
 
