@@ -42,6 +42,8 @@ private:
     void readLevel(const std::string &levelPath);
 
     void defaultLevel();
+
+    void makeFood();
 };
 
 #endif //SNAKE_GAME_PLAY_STATE_HPP

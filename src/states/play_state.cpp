@@ -42,6 +42,8 @@ void PlayState::exit(SnakeGame* game) {
 }
 
 void PlayState::execute(SnakeGame* game) {
+    draw();
+    napms(DELAY);
     int ch = getch();
     checkInputForQP(ch);
     if (m_gameOver) {
@@ -53,8 +55,6 @@ void PlayState::execute(SnakeGame* game) {
     }
     checkInputForMove(ch);
     makeMove();
-    draw();
-    napms(DELAY);
 }
 
 void PlayState::makeMove() {
@@ -68,9 +68,7 @@ void PlayState::makeMove() {
     if (m_food.isFood(nextMove)) {
         m_snake.moveToAndGrow(nextMove);
         m_food.getEaten();
-        while (m_snake.isSnake(m_food.getCoords()) || m_wall.isWall(m_food.getCoords())) {
-            m_food.createNew(m_width, m_height);
-        }
+        makeFood();
         m_score++;
         return;
     }
@@ -139,6 +137,7 @@ void PlayState::draw() const {
     m_wall.draw(m_win);
     drawScore();
     wrefresh(m_win);
+    refresh();
     m_snake.erase(m_win);
 }
 
@@ -175,14 +174,22 @@ void PlayState::readLevel(const std::string& levelPath) {
         ++y;
     }
     m_food = Food(m_width, m_height);
+    makeFood();
 }
 
 void PlayState::defaultLevel() {
     m_snake = Snake(m_width / 2, m_height / 2);
-    m_food = Food(m_width, m_height);
     m_wall = Wall();
     for (int i = 1; i < m_width - 1; i++) {
         m_wall.addWall(coords_t{i, 1});
         m_wall.addWall(coords_t{i, m_height - 2});
+    }
+    m_food = Food(m_width, m_height);
+    makeFood();
+}
+
+void PlayState::makeFood() {
+    while (m_snake.isSnake(m_food.getCoords()) || m_wall.isWall(m_food.getCoords())) {
+        m_food.createNew(m_width, m_height);
     }
 }
