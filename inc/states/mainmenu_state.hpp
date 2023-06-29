@@ -18,7 +18,6 @@ private:
     Menu m_settingsMenu{};
     Menu m_levelsMenu{};
     Menu* m_currentMenu = nullptr;
-    bool m_exit = false;
 
     void initMainMenu(SnakeGame* game);
     void initSettingsMenu(SnakeGame* game);

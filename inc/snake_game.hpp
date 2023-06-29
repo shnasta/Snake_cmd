@@ -5,6 +5,11 @@
 #include <string>
 #include "states/basic_state.hpp"
 
+struct ViewSettings {
+    bool border = true;
+    bool centered = false;
+};
+
 class SnakeGame {
 public:
     SnakeGame();
@@ -16,6 +21,11 @@ public:
     void setState(BasicState<SnakeGame> &state);
 
     void endGame();
+
+    void toggleBorder();
+    void printBorder();
+
+    void toggleCentered();
 
     [[nodiscard]] int getWidth() const { return m_width; }
     [[nodiscard]] int getHeight() const { return m_height; }
@@ -33,12 +43,11 @@ private:
     std::string M_LEVELS_DIR = "levels/";
     std::string m_currentLevel;
 
-    int MIN_WIDTH = 30;
-    int MIN_HEIGHT = 15;
-    int m_width = 0;
-    int m_height = 0;
+    int m_width = 51;
+    int m_height = 20;
     WINDOW *m_win = nullptr;
     bool m_exit = false;
+    ViewSettings m_viewSettings;
 
     int m_score = 0;
     int m_highScore = 0;

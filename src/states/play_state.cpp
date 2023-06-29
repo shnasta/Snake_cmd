@@ -14,11 +14,21 @@ void PlayState::enter(SnakeGame* game) {
     m_gameOver = false;
     m_pause = false;
     m_score = 0;
-    m_width = game->getWidth();
-    m_height = game->getHeight();
+    m_generalWidth = game->getWidth();
+    m_generalHeight = game->getHeight();
     m_win = game->getWindow();
-    box(m_win, 0, 0);
+    game->printBorder();
     refresh();
+    wrefresh(m_win);
+
+    int x, y;
+    getbegyx(m_win, y, x);
+    m_gameWin = newwin(m_height, m_width, y + 1, x + 2);
+    box(m_gameWin, 0, 0);
+    wrefresh(m_gameWin);
+    wrefresh(m_win);
+    refresh();
+    drawInstruct();
     wrefresh(m_win);
 
     auto level = game->getCurrentLevel();
@@ -26,7 +36,7 @@ void PlayState::enter(SnakeGame* game) {
         defaultLevel();
     }
     else {
-        mvwprintw(m_win, 0, 1, " %s ", level.substr(0, level.find_last_of('.')).c_str());
+        mvwprintw(m_gameWin, 0, 1, " %s ", level.substr(0, level.find_last_of('.')).c_str());
         readLevel(game->getLevelsPath() + level);
     }
 }
@@ -35,6 +45,7 @@ void PlayState::exit(SnakeGame* game) {
     game->setScore(m_score);
     game->setHighScore(m_score);
 
+    delwin(m_gameWin);
     wclear(m_win);
     clear();
     refresh();
@@ -132,19 +143,25 @@ void PlayState::checkInputForQP(int ch) {
 }
 
 void PlayState::draw() const {
-    m_snake.draw(m_win);
-    m_food.draw(m_win);
-    m_wall.draw(m_win);
+    m_snake.draw(m_gameWin);
+    m_food.draw(m_gameWin);
+    m_wall.draw(m_gameWin);
     drawScore();
+    wrefresh(m_gameWin);
     wrefresh(m_win);
     refresh();
-    m_snake.erase(m_win);
+    m_snake.erase(m_gameWin);
 }
 
 void PlayState::drawScore() const {
-    mvprintw(m_height, 0, "Score: %d", m_score);
+    mvwprintw(m_win, m_height + 1, 2, "Score: %d", m_score);
     auto lengthStr = "Length: " + std::to_string(m_snake.getLength());
-    mvprintw(m_height, m_width - static_cast<int>(lengthStr.length()), "%s", lengthStr.c_str());
+    mvwprintw(m_win, m_height + 1, m_width + 2 - static_cast<int>(lengthStr.length()), "%s", lengthStr.c_str());
+}
+
+void PlayState::drawInstruct() const {
+    mvwprintw(m_win, 2, m_width + 2, "Press 'p' to pause");
+    mvwprintw(m_win, 3, m_width + 2, "Press 'q' to quit");
 }
 
 void PlayState::readLevel(const std::string& levelPath) {

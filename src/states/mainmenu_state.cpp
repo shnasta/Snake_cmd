@@ -9,9 +9,8 @@ MainMenuState& MainMenuState::getInstance() {
 
 void MainMenuState::enter(SnakeGame* game) {
     nodelay(stdscr, FALSE);
-    m_exit = false;
     m_win = game->getWindow();
-    box(m_win, 0, 0);
+    game->printBorder();
     refresh();
     wrefresh(m_win);
 
@@ -40,32 +39,41 @@ void MainMenuState::execute(SnakeGame* game) {
 void MainMenuState::initMainMenu(SnakeGame* game) {
     m_mainMenu = Menu(4);
     m_mainMenu.setOption(0, "Start", [&, game]() {
-        m_exit = true;
         game->setCurrentLevel("");
         game->setState(PlayState::getInstance());
     });
-    m_mainMenu.setOption(1, "Levels", [&]() {
+    m_mainMenu.setOption(1, "Levels", [&, game]() {
         m_currentMenu = &m_levelsMenu;
         wclear(m_win);
-        box(m_win, 0, 0);
+        game->printBorder();
     });
-    m_mainMenu.setOption(2, "Settings", [&]() {
+    m_mainMenu.setOption(2, "View Settings", [&, game]() {
         m_currentMenu = &m_settingsMenu;
         wclear(m_win);
-        box(m_win, 0, 0);
+        game->printBorder();
     });
     m_mainMenu.setOption(3, "Exit", [&, game]() {
-        m_exit = true;
         game->exit();
     });
 }
 
 void MainMenuState::initSettingsMenu(SnakeGame* game) {
     m_settingsMenu = Menu(3);
-    m_settingsMenu.setOption(0, "Back", [&]() {
+    m_settingsMenu.setOption(0, "Back", [&, game] () {
         m_currentMenu = &m_mainMenu;
         wclear(m_win);
-        box(m_win, 0, 0);
+        game->printBorder();
+    });
+    m_settingsMenu.setOption(1, "Border", [&, game]() {
+        game->toggleBorder();
+    });
+    m_settingsMenu.setOption(2, "Centralize", [&, game]() {
+        wclear(m_win);
+        clear();
+        refresh();
+        game->toggleCentered();
+        game->printBorder();
+        refresh();
     });
 }
 
@@ -75,10 +83,10 @@ void MainMenuState::initLevelsMenu(SnakeGame *game) {
     int numLevels = static_cast<int>(std::distance(fs::directory_iterator(levelsPath), std::filesystem::directory_iterator{}));
 
     m_levelsMenu = Menu(numLevels + 1);
-    m_levelsMenu.setOption(0, "Back", [&]() {
+    m_levelsMenu.setOption(0, "Back", [&, game]() {
         m_currentMenu = &m_mainMenu;
         wclear(m_win);
-        box(m_win, 0, 0);
+        game->printBorder();
     });
 
     int countOpt = 1;
@@ -86,7 +94,6 @@ void MainMenuState::initLevelsMenu(SnakeGame *game) {
         auto levelName = entry.path().filename().string();
         auto rawName = levelName.substr(0, levelName.find_last_of('.'));
         m_levelsMenu.setOption(countOpt, rawName, [&, game, levelName]() {
-            m_exit = true;
             game->setCurrentLevel(levelName);
             game->setState(PlayState::getInstance());
         });

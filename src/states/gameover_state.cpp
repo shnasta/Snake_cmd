@@ -12,7 +12,7 @@ void GameOverState::enter(SnakeGame* game) {
     m_score = game->getScore();
     m_highScore = game->getHighScore();
     m_win = game->getWindow();
-    box(m_win, 0, 0);
+    game->printBorder();
     refresh();
     mvwprintw(m_win, 1, 1, "Game Over!");
     mvwprintw(m_win, 2, 1, "Score:      %d", m_score);

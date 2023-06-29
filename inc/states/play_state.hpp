@@ -16,12 +16,15 @@ public:
     static PlayState& getInstance();
 private:
     WINDOW *m_win{};
+    WINDOW *m_gameWin{};
     Snake m_snake{};
     Food m_food{};
     Wall m_wall{};
     int m_score{};
-    int m_width{};
-    int m_height{};
+    int m_width = 30;
+    int m_height = 15;
+    int m_generalWidth{};
+    int m_generalHeight{};
 
     int DELAY = 300;
     bool m_gameOver = false;
@@ -44,6 +47,8 @@ private:
     void defaultLevel();
 
     void makeFood();
+
+    void drawInstruct() const;
 };
 
 #endif //SNAKE_GAME_PLAY_STATE_HPP
