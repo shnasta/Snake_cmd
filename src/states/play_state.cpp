@@ -12,6 +12,7 @@ void PlayState::enter(SnakeGame* game) {
     nodelay(stdscr, TRUE);
     refresh();
     m_gameOver = false;
+    m_pause = false;
     m_score = 0;
     m_width = game->getWidth();
     m_height = game->getHeight();
@@ -40,21 +41,25 @@ void PlayState::exit(SnakeGame* game) {
 
 void PlayState::execute(SnakeGame* game) {
     while (true) {
-        makeMove();
-        draw();
-        napms(DELAY);
+        int ch = getch();
+        checkInputForQP(ch);
         if (m_gameOver) {
             game->setState(GameOverState::getInstance());
             break;
         }
+        if (m_pause) {
+            continue;
+        }
+        checkInputForMove(ch);
+        makeMove();
+        draw();
+        napms(DELAY);
     }
 }
 
 void PlayState::makeMove() {
-    checkInput();
     auto nextMove = m_snake.predictMove();
     checkForTeleport(nextMove);
-
 
     if (m_wall.isWall(nextMove)) {
         m_gameOver = true;
@@ -85,8 +90,7 @@ void PlayState::checkForTeleport(coords_t &nextMove) const {
     }
 }
 
-void PlayState::checkInput() {
-    int ch = getch();
+void PlayState::checkInputForMove(int ch) {
     if (ch == ERR) {
         return;
     }
@@ -106,6 +110,20 @@ void PlayState::checkInput() {
         case KEY_RIGHT:
         case 'd':
             m_snake.setDirection(RIGHT);
+            break;
+        default:
+            break;
+    }
+}
+
+void PlayState::checkInputForQP(int ch) {
+    if (ch == ERR) {
+        return;
+    }
+
+    switch (ch) {
+        case 'p':
+            m_pause = !m_pause;
             break;
         case 'q':
             m_gameOver = true;

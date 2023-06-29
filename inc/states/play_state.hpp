@@ -25,12 +25,15 @@ private:
 
     int DELAY = 300;
     bool m_gameOver = false;
+    bool m_pause = false;
 
     void makeMove();
 
     void checkForTeleport(coords_t &nextMove) const;
 
-    void checkInput();
+    void checkInputForQP(int ch);
+
+    void checkInputForMove(int ch);
 
     void draw() const;
 
