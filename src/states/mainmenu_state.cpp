@@ -25,16 +25,16 @@ void MainMenuState::enter(SnakeGame* game) {
 void MainMenuState::exit(SnakeGame* game) {
     wclear(m_win);
     clear();
+    refresh();
+    wrefresh(m_win);
 }
 
 void MainMenuState::execute(SnakeGame* game) {
     int choice;
-    while (!m_exit) {
-        m_currentMenu->draw(m_win, 1, 1);
+    m_currentMenu->draw(m_win, 1, 1);
 
-        choice = getch();
-        m_currentMenu->handleInput(choice);
-    }
+    choice = getch();
+    m_currentMenu->handleInput(choice);
 }
 
 void MainMenuState::initMainMenu(SnakeGame* game) {
@@ -56,7 +56,7 @@ void MainMenuState::initMainMenu(SnakeGame* game) {
     });
     m_mainMenu.setOption(3, "Exit", [&, game]() {
         m_exit = true;
-        game->endGame();
+        game->exit();
     });
 }
 

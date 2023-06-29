@@ -21,6 +21,10 @@ SnakeGame::~SnakeGame() {
 
 void SnakeGame::run() {
     setState(MainMenuState::getInstance());
+    while (!m_exit) {
+        m_currentState->execute(this);
+    }
+    endGame();
 }
 
 void SnakeGame::setState(BasicState<SnakeGame> &state) {
@@ -28,8 +32,6 @@ void SnakeGame::setState(BasicState<SnakeGame> &state) {
         m_currentState->exit(this);
     m_currentState = &state;
     m_currentState->enter(this);
-
-    m_currentState->execute(this);
 }
 
 void SnakeGame::endGame() {

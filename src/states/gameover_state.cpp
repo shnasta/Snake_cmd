@@ -25,22 +25,20 @@ void GameOverState::enter(SnakeGame* game) {
 void GameOverState::exit(SnakeGame* game) {
     wclear(m_win);
     clear();
+    refresh();
+    wrefresh(m_win);
 }
 
 void GameOverState::execute(SnakeGame* game) {
-    while (true) {
-        m_menu.draw(m_win, 5, 1);
+    m_menu.draw(m_win, 5, 1);
 
-        int choice = getch();
-        if (m_menu.handleInput(choice)) {
-            break;
-        }
-    }
+    int choice = getch();
+    m_menu.handleInput(choice);
 }
 
 void GameOverState::initMenu(SnakeGame* game) {
     m_menu = Menu(3);
     m_menu.setOption(0, "Restart", [game]() { game->setState(PlayState::getInstance()); });
     m_menu.setOption(1, "Main Menu", [game]() { game->setState(MainMenuState::getInstance()); });
-    m_menu.setOption(2, "Exit", [game]() { game->endGame(); });
+    m_menu.setOption(2, "Exit", [game]() { game->exit(); });
 }

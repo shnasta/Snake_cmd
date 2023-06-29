@@ -27,6 +27,7 @@ public:
     [[nodiscard]] std::string getLevelsPath() const { return M_LEVELS_DIR; }
     [[nodiscard]] std::string getCurrentLevel() const { return m_currentLevel; }
     void setCurrentLevel(std::string level) { m_currentLevel = std::move(level); }
+    void exit() { m_exit = true; }
 private:
     BasicState<SnakeGame> *m_currentState = nullptr;
     std::string M_LEVELS_DIR = "levels/";
@@ -37,6 +38,7 @@ private:
     int m_width = 0;
     int m_height = 0;
     WINDOW *m_win = nullptr;
+    bool m_exit = false;
 
     int m_score = 0;
     int m_highScore = 0;

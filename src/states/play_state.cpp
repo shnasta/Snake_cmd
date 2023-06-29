@@ -37,24 +37,24 @@ void PlayState::exit(SnakeGame* game) {
 
     wclear(m_win);
     clear();
+    refresh();
+    wrefresh(m_win);
 }
 
 void PlayState::execute(SnakeGame* game) {
-    while (true) {
-        int ch = getch();
-        checkInputForQP(ch);
-        if (m_gameOver) {
-            game->setState(GameOverState::getInstance());
-            break;
-        }
-        if (m_pause) {
-            continue;
-        }
-        checkInputForMove(ch);
-        makeMove();
-        draw();
-        napms(DELAY);
+    int ch = getch();
+    checkInputForQP(ch);
+    if (m_gameOver) {
+        game->setState(GameOverState::getInstance());
+        return;
     }
+    if (m_pause) {
+        return;
+    }
+    checkInputForMove(ch);
+    makeMove();
+    draw();
+    napms(DELAY);
 }
 
 void PlayState::makeMove() {
