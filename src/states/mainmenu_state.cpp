@@ -1,6 +1,7 @@
 #include "states/mainmenu_state.hpp"
 #include "states/play_state.hpp"
 #include <filesystem>
+#include <set>
 
 MainMenuState& MainMenuState::getInstance() {
     static MainMenuState instance;
@@ -89,9 +90,14 @@ void MainMenuState::initLevelsMenu(SnakeGame *game) {
         game->printBorder();
     });
 
-    int countOpt = 1;
+    std::set<std::string> sorted_by_name;
+
     for (const auto& entry : fs::directory_iterator(levelsPath)) {
-        auto levelName = entry.path().filename().string();
+        sorted_by_name.insert(entry.path().filename().string());
+    }
+
+    int countOpt = 1;
+    for (const auto& levelName : sorted_by_name) {
         auto rawName = levelName.substr(0, levelName.find_last_of('.'));
         m_levelsMenu.setOption(countOpt, rawName, [&, game, levelName]() {
             game->setCurrentLevel(levelName);

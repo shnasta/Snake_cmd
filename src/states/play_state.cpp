@@ -197,10 +197,10 @@ void PlayState::readLevel(const std::string& levelPath) {
 void PlayState::defaultLevel() {
     m_snake = Snake(m_width / 2, m_height / 2);
     m_wall = Wall();
-    for (int i = 1; i < m_width - 1; i++) {
-        m_wall.addWall(coords_t{i, 1});
-        m_wall.addWall(coords_t{i, m_height - 2});
-    }
+//    for (int i = 1; i < m_width - 1; i++) {
+//        m_wall.addWall(coords_t{i, 1});
+//        m_wall.addWall(coords_t{i, m_height - 2});
+//    }
     m_food = Food(m_width, m_height);
     makeFood();
 }
