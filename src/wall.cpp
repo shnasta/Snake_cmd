@@ -1,5 +1,7 @@
 #include "wall.hpp"
 #include <random>
+#include <utility>
+#include <algorithm>
 
 Wall::Wall(std::vector<coords_t>& walls) : m_walls(std::move(walls)) {}
 
